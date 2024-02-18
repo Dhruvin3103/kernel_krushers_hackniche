@@ -91,7 +91,7 @@ function Playground() {
 
       // Fetch and set Gemini code
       const geminiResponse = await axios.post(
-        "https://b75d-14-139-125-227.ngrok-free.app/api/codegenerator/",
+        "https://c1d7-14-139-125-227.ngrok-free.app/api/codegenerator/",
         { prompt: userInput, language: selectedLanguage }
       );
       setGeminiCode(geminiResponse.data.gemini);

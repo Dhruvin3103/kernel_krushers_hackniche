@@ -18,11 +18,17 @@ import re
 #         return "no","any"
 
 
-def segerate(text):
-    pattern = r"```([\s\S]+?)```"
-    matches = re.findall(pattern, text)
-    return [block.split("\n", 1)[1] if "\n" in block else "" for block in matches]
-
+def extract_code(input_string):
+    if "```" in input_string:
+        start_index = input_string.find("```") + 3  
+        end_index = input_string.find("```", start_index)
+        code_block = input_string[start_index:end_index].strip()
+        code_lines = code_block.split('\n', 1)
+        if len(code_lines) > 1:
+            code_block = code_lines[1]
+        return code_block
+    else:
+        return input_string
 
 def generate_gemini(schema, language, database, prompt):
     genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -60,39 +66,41 @@ def generate_gemini(schema, language, database, prompt):
     response = ""
     for chunk in res:
         response += chunk.text
-    q_code = segerate(response)
+    q_code = extract_code(response)
     result = {"code": q_code}
     json_result1 = json.dumps(result, indent=2)
+    return json_result1
+    # res = convo.send_message(
+    #     "give me just sample input data values for the previous code you provided in javascript",
+    #     stream=True,
+    # )
+    
+    
+    # response2 = ""
+    # for chunk in res:
+    #     response2 += chunk.text
+    # q_code = segerate(response2)
+    # result = {"input_data": q_code}
+    # json_result2 = json.dumps(result, indent=2)
 
-    res = convo.send_message(
-        "give me just sample input data values for the previous code you provided in javascript",
-        stream=True,
-    )
-    response2 = ""
-    for chunk in res:
-        response2 += chunk.text
-    q_code = segerate(response2)
-    result = {"input_data": q_code}
-    json_result2 = json.dumps(result, indent=2)
+    # res = convo.send_message(
+    #     "give me sample output data values for the previous code you provided",
+    #     stream=True,
+    # )
+    # response3 = ""
+    # for chunk in res:
+    #     response3 += chunk.text
+    # # print(response3)
+    # o_code = segerate(response3)
+    # result = {"output_data": o_code}
+    # json_result3 = json.dumps(result, indent=2)
+    # # print(json_result3)
 
-    res = convo.send_message(
-        "give me sample output data values for the previous code you provided",
-        stream=True,
-    )
-    response3 = ""
-    for chunk in res:
-        response3 += chunk.text
-    # print(response3)
-    o_code = segerate(response3)
-    result = {"output_data": o_code}
-    json_result3 = json.dumps(result, indent=2)
-    # print(json_result3)
-
-    output = {
-      json_result1, json_result2,json_result3,
-    }
-    print(output, "output hai ")
-    return output
+    # output = {
+    #   json_result1, json_result2,json_result3,
+    # }
+    # print(output, "output hai ")
+    # return output
 
 
 # schema = """

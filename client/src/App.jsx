@@ -30,7 +30,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 ))
 
 export default function App() {
-  let [sidebarData, setSidebarData] = React.useState(null);
+  let [sidebarData, setSidebarData] = React.useState();
   let [mainContentInput, setMainContentInput] = React.useState("");
   let [queryResponse, setQueryResponse] = React.useState(null);
 

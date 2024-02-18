@@ -43,9 +43,11 @@ class QueryGeneratorView(APIView):
             schema = serializer.validated_data["schema"]
             language = serializer.validated_data["language"]
             prompt = serializer.validated_data["prompt"]
-            output = generate_gemini(schema, language, "nosql", prompt)
-            # out_openai = generate_openai(schema, language, "nosql", prompt)
+            print(prompt)
+            # output = generate_gemini(schema, language, "nosql", prompt)
+            # print(output)
+            out_openai = generate_openai(schema, language, "nosql", prompt)
             # print(out_openai)
-            return Response({"response": output}, status=status.HTTP_200_OK)
+            return Response(out_openai, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

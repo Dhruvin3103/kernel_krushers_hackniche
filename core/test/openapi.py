@@ -1,14 +1,21 @@
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+import json
 import re
 load_dotenv()
 
-def segerate(text):
-    pattern = r"```([\s\S]+?)```"
-    matches = re.findall(pattern, text)
-    out = [block.split("\n", 1)[1] if "\n" in block else "" for block in matches]
-    return out
+def extract_code(input_string):
+    if "```" in input_string:
+        start_index = input_string.find("```") + 3  
+        end_index = input_string.find("```", start_index)
+        code_block = input_string[start_index:end_index].strip()
+        code_lines = code_block.split('\n', 1)
+        if len(code_lines) > 1:
+            code_block = code_lines[1]
+        return code_block
+    else:
+        return input_string
 
 def generate_openai(schema, language, database, prompt):
     client = OpenAI(
@@ -29,7 +36,9 @@ def generate_openai(schema, language, database, prompt):
             response += chunk.choices[0].delta.content
             print(chunk.choices[0].delta.content,end="")
     print(response)
-    return segerate(response)
+    result = {"code": response}
+    json_result1 = json.dumps(result, indent=2)
+    return json_result1
     
     
     prompt = "Generate sample input data values in javascript for the previous response and the schema"

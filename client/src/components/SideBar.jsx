@@ -50,7 +50,7 @@ function SideBar() {
     console.log(mainContentInput);
     //Send the data to the backend
     try {
-        const response = await axios.post('https://b75d-14-139-125-227.ngrok-free.app/api/querygenerate/', 
+        const response = await axios.post('https://c1d7-14-139-125-227.ngrok-free.app/api/querygenerate/', 
             {
                 schema: JSON.stringify(sidebarData), 
                 prompt: `${mainContentInput}`, 

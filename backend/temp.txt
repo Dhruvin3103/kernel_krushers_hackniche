@@ -1,6 +1,43 @@
-def is_anagram(str1, str2):
-    return sorted(str1) == sorted(str2)
+/*
+ *  Function to check whether two strings are anagrams of each other
+ *
+ *  @param {string} firstString The first string to compare
+ *  @param {string} secondString The second string to compare
+ *  @returns {boolean} True if the strings are anagrams, false otherwise
+ */
+const isAnagram = (firstString, secondString) => {
+  // Check if the strings are the same length
+  if (firstString.length !== secondString.length) {
+    return false;
+  }
 
+  // Create a map of the characters in the first string
+  const firstStringMap = {};
+  for (let i = 0; i < firstString.length; i++) {
+    const character = firstString[i];
+    if (!firstStringMap[character]) {
+      firstStringMap[character] = 0;
+    }
+    firstStringMap[character]++;
+  }
 
-print(is_anagram("hello", "olleh"))  # True
-print(is_anagram("hello", "world"))  # False
+  // Check if the characters in the second string are in the map
+  for (let i = 0; i < secondString.length; i++) {
+    const character = secondString[i];
+    if (!firstStringMap[character]) {
+      return false;
+    }
+    firstStringMap[character]--;
+    if (firstStringMap[character] < 0) {
+      return false;
+    }
+  }
+
+  // All the characters in the second string are in the map, so the strings are anagrams
+  return true;
+};
+
+// Test the function with a hard example
+const firstString = "anagram";
+const secondString = "nag a ram";
+console.log(`"${firstString}" and "${secondString}" are anagrams: ${isAnagram(firstString, secondString)}`);
